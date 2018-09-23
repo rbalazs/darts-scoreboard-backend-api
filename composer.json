@@ -16,6 +16,7 @@
         "symfony/yaml": "*"
     },
     "require-dev": {
+        "fzaninotto/faker": "^1.8",
         "symfony/dotenv": "*",
         "symfony/maker-bundle": "^1.7"
     },
