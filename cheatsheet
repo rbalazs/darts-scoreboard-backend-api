@@ -1,0 +1,14 @@
+docker run -d -ti -p 80:8080 --rm -v "$PWD":/usr/src/myapp -w /usr/src/myapp php:7.2-cli php -S 0.0.0.0:8080 -t public
+
+docker build --tag=darts-scoreboard-backend-api:0.0.1 .
+
+docker rm $(docker ps -aq) && docker rmi $(docker images -aq)
+
+docker run -ti --rm -v "$PWD":/usr/src/myapp -w /usr/src/myapp php:7.2-cli php ./bin/console
+docker run -ti --rm -v "$PWD":/usr/src/myapp -w /usr/src/myapp php:7.2-cli php ./bin/console doctrine:database:create
+docker run -ti --rm -v "$PWD":/usr/src/myapp -w /usr/src/myapp darts-scoreboard-backend-api php ./bin/console make:entity
+docker run -ti --rm -v "$PWD":/usr/src/myapp -w /usr/src/myapp darts-scoreboard-backend-api php ./bin/console doctrine:schema:update --force
+docker run -ti --rm -v "$PWD":/usr/src/myapp -w /usr/src/myapp darts-scoreboard-backend-api php ./bin/console make:migration
+docker run -ti --rm -v "$PWD":/usr/src/myapp -w /usr/src/myapp darts-scoreboard-backend-api php ./bin/console doctrine:migration:migrate
+
+docker run -ti --rm -v "$PWD":/usr/src/myapp -w /usr/src/myapp darts-scoreboard-backend-api php ./bin/console doctrine:fixtures:load
