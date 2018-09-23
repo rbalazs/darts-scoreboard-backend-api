@@ -10,9 +10,9 @@ use Gedmo\Mapping\Annotation as Gedmo;
 
 /**
  * @ApiResource()
- * @ORM\Entity(repositoryClass="App\Repository\PlayerRepository")
+ * @ORM\Entity(repositoryClass="App\Repository\EncounterRepository")
  */
-class Player
+class Encounter
 {
     /**
      * @ORM\Id()
@@ -24,7 +24,7 @@ class Player
     /**
      * @ORM\Column(type="string", length=255)
      */
-    private $name;
+    private $type;
 
     /**
      * @ORM\Column(type="datetime")
@@ -37,15 +37,19 @@ class Player
      * @Gedmo\Timestampable(on="create")
      */
     private $created_at;
+    /**
+     * @ORM\ManyToMany(targetEntity="App\Entity\Player", inversedBy="encounters")
+     */
+    private $players;
 
     /**
-     * @ORM\ManyToMany(targetEntity="App\Entity\Encounter", mappedBy="players")
+     * @ORM\Column(type="boolean", nullable=true)
      */
-    private $encounters;
+    private $finished;
 
     public function __construct()
     {
-        $this->encounters = new ArrayCollection();
+        $this->players = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -53,14 +57,14 @@ class Player
         return $this->id;
     }
 
-    public function getName(): ?string
+    public function getType(): ?string
     {
-        return $this->name;
+        return $this->type;
     }
 
-    public function setName(string $name): self
+    public function setType(string $type): self
     {
-        $this->name = $name;
+        $this->type = $type;
 
         return $this;
     }
@@ -76,29 +80,39 @@ class Player
     }
 
     /**
-     * @return Collection|Encounter[]
+     * @return Collection|Player[]
      */
-    public function getEncounters(): Collection
+    public function getPlayers(): Collection
     {
-        return $this->encounters;
+        return $this->players;
     }
 
-    public function addEncounter(Encounter $encounter): self
+    public function addPlayer(Player $player): self
     {
-        if (!$this->encounters->contains($encounter)) {
-            $this->encounters[] = $encounter;
-            $encounter->addPlayer($this);
+        if (!$this->players->contains($player)) {
+            $this->players[] = $player;
         }
 
         return $this;
     }
 
-    public function removeEncounter(Encounter $encounter): self
+    public function removePlayer(Player $player): self
     {
-        if ($this->encounters->contains($encounter)) {
-            $this->encounters->removeElement($encounter);
-            $encounter->removePlayer($this);
+        if ($this->players->contains($player)) {
+            $this->players->removeElement($player);
         }
+
+        return $this;
+    }
+
+    public function getFinished(): ?bool
+    {
+        return $this->finished;
+    }
+
+    public function setFinished(?bool $finished): self
+    {
+        $this->finished = $finished;
 
         return $this;
     }
