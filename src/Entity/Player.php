@@ -2,16 +2,15 @@
 
 namespace App\Entity;
 
-use Gedmo\Mapping\Annotation as Gedmo;
-use Doctrine\ORM\Mapping as ORM;
 use ApiPlatform\Core\Annotation\ApiResource;
+use Doctrine\ORM\Mapping as ORM;
+use Gedmo\Mapping\Annotation as Gedmo;
 
 /**
- * @ORM\Entity(repositoryClass="App\Repository\ScoreRepository")
- *
- * @ApiResource
+ * @ApiResource()
+ * @ORM\Entity(repositoryClass="App\Repository\PlayerRepository")
  */
-class Score
+class Player
 {
     /**
      * @ORM\Id()
@@ -23,12 +22,7 @@ class Score
     /**
      * @ORM\Column(type="string", length=255)
      */
-    private $field;
-
-    /**
-     * @ORM\Column(type="smallint")
-     */
-    private $value;
+    private $name;
 
     /**
      * @ORM\Column(type="datetime")
@@ -47,26 +41,14 @@ class Score
         return $this->id;
     }
 
-    public function getField(): ?string
+    public function getName(): ?string
     {
-        return $this->field;
+        return $this->name;
     }
 
-    public function setField(string $field): self
+    public function setName(string $name): self
     {
-        $this->field = $field;
-
-        return $this;
-    }
-
-    public function getValue(): ?int
-    {
-        return $this->value;
-    }
-
-    public function setValue(int $value): self
-    {
-        $this->value = $value;
+        $this->name = $name;
 
         return $this;
     }
@@ -80,5 +62,4 @@ class Score
     {
         return $this->created_at;
     }
-
 }
