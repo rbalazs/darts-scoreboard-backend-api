@@ -1,4 +1,4 @@
-docker run -d -ti -p 80:8080 --rm -v "$PWD":/usr/src/myapp -w /usr/src/myapp php:7.2-cli php -S 0.0.0.0:8080 -t public
+docker run --name darts-scoreboard-backend-api -d -ti -p 80:8080 --rm -v "$PWD":/usr/src/myapp -w /usr/src/myapp darts-scoreboard-backend-api php -S 0.0.0.0:8080 -t public
 
 docker build --tag=darts-scoreboard-backend-api:0.0.1 .
 
